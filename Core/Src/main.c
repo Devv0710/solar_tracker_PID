@@ -110,13 +110,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-      // Gira en una dirección
-      stepForward(512, 4);  // 512 pasos con 5 ms entre pasos (~medio giro)
-      HAL_Delay(1000);
 
-      // Gira en la dirección contraria
-      stepBackward(512, 4);
-      HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
