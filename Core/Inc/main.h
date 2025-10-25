@@ -59,6 +59,14 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
+#define LDR_2_Pin GPIO_PIN_0
+#define LDR_2_GPIO_Port GPIOC
+#define LDR_3_Pin GPIO_PIN_1
+#define LDR_3_GPIO_Port GPIOC
+#define LDR_4_Pin GPIO_PIN_2
+#define LDR_4_GPIO_Port GPIOC
+#define LDR_5_Pin GPIO_PIN_3
+#define LDR_5_GPIO_Port GPIOC
 #define USART_TX_Pin GPIO_PIN_2
 #define USART_TX_GPIO_Port GPIOA
 #define USART_RX_Pin GPIO_PIN_3
@@ -69,6 +77,8 @@ void Error_Handler(void);
 #define M_4_GPIO_Port GPIOA
 #define M_3_Pin GPIO_PIN_7
 #define M_3_GPIO_Port GPIOA
+#define LDR_1_Pin GPIO_PIN_1
+#define LDR_1_GPIO_Port GPIOB
 #define M_1_Pin GPIO_PIN_7
 #define M_1_GPIO_Port GPIOC
 #define TMS_Pin GPIO_PIN_13
