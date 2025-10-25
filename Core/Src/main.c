@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2025 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -28,17 +28,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-// Secuencia half-step (8 pasos)
-const uint8_t step_sequence[8][4] = {
-    {1,0,0,0},
-    {1,1,0,0},
-    {0,1,0,0},
-    {0,1,1,0},
-    {0,0,1,0},
-    {0,0,1,1},
-    {0,0,0,1},
-    {1,0,0,1}
-};
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -60,10 +50,7 @@ const uint8_t step_sequence[8][4] = {
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void stepMotor(int step);
-void stepForward(int steps, uint32_t delay_ms);
-void stepBackward(int steps, uint32_t delay_ms);
-
+extern void app_main();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -102,17 +89,16 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  app_main();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+	while (1) {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+	}
   /* USER CODE END 3 */
 }
 
@@ -163,29 +149,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void stepMotor(int step)
-{
-    HAL_GPIO_WritePin(M_1_GPIO_Port, M_1_Pin, step_sequence[step][0] ? GPIO_PIN_SET : GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(M_2_GPIO_Port, M_2_Pin, step_sequence[step][1] ? GPIO_PIN_SET : GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(M_3_GPIO_Port, M_3_Pin, step_sequence[step][2] ? GPIO_PIN_SET : GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(M_4_GPIO_Port, M_4_Pin, step_sequence[step][3] ? GPIO_PIN_SET : GPIO_PIN_RESET);
-}
 
-void stepForward(int steps, uint32_t delay_ms)
-{
-    for (int i = 0; i < steps; i++) {
-        stepMotor(i % 8);
-        HAL_Delay(delay_ms);
-    }
-}
-
-void stepBackward(int steps, uint32_t delay_ms)
-{
-    for (int i = steps; i > 0; i--) {
-        stepMotor(i % 8);
-        HAL_Delay(delay_ms);
-    }
-}
 /* USER CODE END 4 */
 
 /**
@@ -195,11 +159,10 @@ void stepBackward(int steps, uint32_t delay_ms)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1) {
+	}
   /* USER CODE END Error_Handler_Debug */
 }
 #ifdef USE_FULL_ASSERT
