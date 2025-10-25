@@ -67,28 +67,36 @@ void Error_Handler(void);
 #define LDR_4_GPIO_Port GPIOC
 #define LDR_5_Pin GPIO_PIN_3
 #define LDR_5_GPIO_Port GPIOC
+#define M_AZ_1_Pin GPIO_PIN_0
+#define M_AZ_1_GPIO_Port GPIOA
+#define M_AZ_2_Pin GPIO_PIN_1
+#define M_AZ_2_GPIO_Port GPIOA
 #define USART_TX_Pin GPIO_PIN_2
 #define USART_TX_GPIO_Port GPIOA
 #define USART_RX_Pin GPIO_PIN_3
 #define USART_RX_GPIO_Port GPIOA
+#define M_AZ_3_Pin GPIO_PIN_4
+#define M_AZ_3_GPIO_Port GPIOA
 #define LD2_Pin GPIO_PIN_5
 #define LD2_GPIO_Port GPIOA
-#define M_4_Pin GPIO_PIN_6
-#define M_4_GPIO_Port GPIOA
-#define M_3_Pin GPIO_PIN_7
-#define M_3_GPIO_Port GPIOA
+#define M_EL_4_Pin GPIO_PIN_6
+#define M_EL_4_GPIO_Port GPIOA
+#define M_EL_3_Pin GPIO_PIN_7
+#define M_EL_3_GPIO_Port GPIOA
+#define M_AZ_4_Pin GPIO_PIN_0
+#define M_AZ_4_GPIO_Port GPIOB
 #define LDR_1_Pin GPIO_PIN_1
 #define LDR_1_GPIO_Port GPIOB
-#define M_1_Pin GPIO_PIN_7
-#define M_1_GPIO_Port GPIOC
+#define M_EL_1_Pin GPIO_PIN_7
+#define M_EL_1_GPIO_Port GPIOC
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
-#define M_2_Pin GPIO_PIN_6
-#define M_2_GPIO_Port GPIOB
+#define M_EL_2_Pin GPIO_PIN_6
+#define M_EL_2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

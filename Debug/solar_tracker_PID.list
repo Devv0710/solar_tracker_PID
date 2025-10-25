@@ -27,25 +27,25 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  0000400c  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00008922  00000000  00000000  0000403c  2**0
+ 12 .debug_info   00008833  00000000  00000000  0000403c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 0000190f  00000000  00000000  0000c95e  2**0
+ 13 .debug_abbrev 0000190d  00000000  00000000  0000c86f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00000788  00000000  00000000  0000e270  2**3
+ 14 .debug_aranges 00000788  00000000  00000000  0000e180  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_rnglists 000005b6  00000000  00000000  0000e9f8  2**0
+ 15 .debug_rnglists 000005b5  00000000  00000000  0000e908  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  0001612a  00000000  00000000  0000efae  2**0
+ 16 .debug_macro  0001615a  00000000  00000000  0000eebd  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00009fdb  00000000  00000000  000250d8  2**0
+ 17 .debug_line   00009fc1  00000000  00000000  00025017  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0008d22d  00000000  00000000  0002f0b3  2**0
+ 18 .debug_str    0008d2d2  00000000  00000000  0002efd8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  000bc2e0  2**0
+ 19 .comment      00000043  00000000  00000000  000bc2aa  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00001d44  00000000  00000000  000bc324  2**2
+ 20 .debug_frame  00001d48  00000000  00000000  000bc2f0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000093  00000000  00000000  000be068  2**0
+ 21 .debug_line_str 0000006c  00000000  00000000  000be038  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -684,23 +684,24 @@ void MX_GPIO_Init(void)
  80006e8:	687b      	ldr	r3, [r7, #4]
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LD2_Pin|M_4_Pin|M_3_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, M_AZ_1_Pin|M_AZ_2_Pin|M_AZ_3_Pin|LD2_Pin
  80006ea:	2200      	movs	r2, #0
- 80006ec:	21e0      	movs	r1, #224	@ 0xe0
+ 80006ec:	21f3      	movs	r1, #243	@ 0xf3
  80006ee:	4825      	ldr	r0, [pc, #148]	@ (8000784 <MX_GPIO_Init+0x120>)
  80006f0:	f000 ff12 	bl	8001518 <HAL_GPIO_WritePin>
+                          |M_EL_4_Pin|M_EL_3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(M_1_GPIO_Port, M_1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, M_AZ_4_Pin|M_EL_2_Pin, GPIO_PIN_RESET);
  80006f4:	2200      	movs	r2, #0
- 80006f6:	2180      	movs	r1, #128	@ 0x80
+ 80006f6:	2141      	movs	r1, #65	@ 0x41
  80006f8:	4823      	ldr	r0, [pc, #140]	@ (8000788 <MX_GPIO_Init+0x124>)
  80006fa:	f000 ff0d 	bl	8001518 <HAL_GPIO_WritePin>
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(M_2_GPIO_Port, M_2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(M_EL_1_GPIO_Port, M_EL_1_Pin, GPIO_PIN_RESET);
  80006fe:	2200      	movs	r2, #0
- 8000700:	2140      	movs	r1, #64	@ 0x40
+ 8000700:	2180      	movs	r1, #128	@ 0x80
  8000702:	4822      	ldr	r0, [pc, #136]	@ (800078c <MX_GPIO_Init+0x128>)
  8000704:	f000 ff08 	bl	8001518 <HAL_GPIO_WritePin>
 
@@ -717,13 +718,15 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
  8000718:	f107 0314 	add.w	r3, r7, #20
  800071c:	4619      	mov	r1, r3
- 800071e:	481a      	ldr	r0, [pc, #104]	@ (8000788 <MX_GPIO_Init+0x124>)
+ 800071e:	481b      	ldr	r0, [pc, #108]	@ (800078c <MX_GPIO_Init+0x128>)
  8000720:	f000 fd76 	bl	8001210 <HAL_GPIO_Init>
 
-  /*Configure GPIO pins : LD2_Pin M_4_Pin M_3_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin|M_4_Pin|M_3_Pin;
- 8000724:	23e0      	movs	r3, #224	@ 0xe0
+  /*Configure GPIO pins : M_AZ_1_Pin M_AZ_2_Pin M_AZ_3_Pin LD2_Pin
+                           M_EL_4_Pin M_EL_3_Pin */
+  GPIO_InitStruct.Pin = M_AZ_1_Pin|M_AZ_2_Pin|M_AZ_3_Pin|LD2_Pin
+ 8000724:	23f3      	movs	r3, #243	@ 0xf3
  8000726:	617b      	str	r3, [r7, #20]
+                          |M_EL_4_Pin|M_EL_3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
  8000728:	2301      	movs	r3, #1
  800072a:	61bb      	str	r3, [r7, #24]
@@ -739,9 +742,9 @@ void MX_GPIO_Init(void)
  800073a:	4812      	ldr	r0, [pc, #72]	@ (8000784 <MX_GPIO_Init+0x120>)
  800073c:	f000 fd68 	bl	8001210 <HAL_GPIO_Init>
 
-  /*Configure GPIO pin : M_1_Pin */
-  GPIO_InitStruct.Pin = M_1_Pin;
- 8000740:	2380      	movs	r3, #128	@ 0x80
+  /*Configure GPIO pins : M_AZ_4_Pin M_EL_2_Pin */
+  GPIO_InitStruct.Pin = M_AZ_4_Pin|M_EL_2_Pin;
+ 8000740:	2341      	movs	r3, #65	@ 0x41
  8000742:	617b      	str	r3, [r7, #20]
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
  8000744:	2301      	movs	r3, #1
@@ -752,15 +755,15 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
  800074c:	2300      	movs	r3, #0
  800074e:	623b      	str	r3, [r7, #32]
-  HAL_GPIO_Init(M_1_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
  8000750:	f107 0314 	add.w	r3, r7, #20
  8000754:	4619      	mov	r1, r3
  8000756:	480c      	ldr	r0, [pc, #48]	@ (8000788 <MX_GPIO_Init+0x124>)
  8000758:	f000 fd5a 	bl	8001210 <HAL_GPIO_Init>
 
-  /*Configure GPIO pin : M_2_Pin */
-  GPIO_InitStruct.Pin = M_2_Pin;
- 800075c:	2340      	movs	r3, #64	@ 0x40
+  /*Configure GPIO pin : M_EL_1_Pin */
+  GPIO_InitStruct.Pin = M_EL_1_Pin;
+ 800075c:	2380      	movs	r3, #128	@ 0x80
  800075e:	617b      	str	r3, [r7, #20]
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
  8000760:	2301      	movs	r3, #1
@@ -771,7 +774,7 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
  8000768:	2300      	movs	r3, #0
  800076a:	623b      	str	r3, [r7, #32]
-  HAL_GPIO_Init(M_2_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(M_EL_1_GPIO_Port, &GPIO_InitStruct);
  800076c:	f107 0314 	add.w	r3, r7, #20
  8000770:	4619      	mov	r1, r3
  8000772:	4806      	ldr	r0, [pc, #24]	@ (800078c <MX_GPIO_Init+0x128>)
@@ -784,8 +787,8 @@ void MX_GPIO_Init(void)
  800077e:	bd80      	pop	{r7, pc}
  8000780:	40023800 	.word	0x40023800
  8000784:	40020000 	.word	0x40020000
- 8000788:	40020800 	.word	0x40020800
- 800078c:	40020400 	.word	0x40020400
+ 8000788:	40020400 	.word	0x40020400
+ 800078c:	40020800 	.word	0x40020800
 
 08000790 <main>:
 /**

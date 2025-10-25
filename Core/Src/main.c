@@ -167,10 +167,10 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void stepMotor(int step)
 {
-    HAL_GPIO_WritePin(M_1_GPIO_Port, M_1_Pin, step_sequence[step][0] ? GPIO_PIN_SET : GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(M_2_GPIO_Port, M_2_Pin, step_sequence[step][1] ? GPIO_PIN_SET : GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(M_3_GPIO_Port, M_3_Pin, step_sequence[step][2] ? GPIO_PIN_SET : GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(M_4_GPIO_Port, M_4_Pin, step_sequence[step][3] ? GPIO_PIN_SET : GPIO_PIN_RESET);
+//    HAL_GPIO_WritePin(M_1_GPIO_Port, M_1_Pin, step_sequence[step][0] ? GPIO_PIN_SET : GPIO_PIN_RESET);
+//    HAL_GPIO_WritePin(M_2_GPIO_Port, M_2_Pin, step_sequence[step][1] ? GPIO_PIN_SET : GPIO_PIN_RESET);
+//    HAL_GPIO_WritePin(M_3_GPIO_Port, M_3_Pin, step_sequence[step][2] ? GPIO_PIN_SET : GPIO_PIN_RESET);
+//    HAL_GPIO_WritePin(M_4_GPIO_Port, M_4_Pin, step_sequence[step][3] ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
 
 void stepForward(int steps, uint32_t delay_ms)
