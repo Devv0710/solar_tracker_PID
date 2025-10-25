@@ -5,6 +5,7 @@
  *      Author: Devv
  */
 #include "main.h"
+/*
 
 // Secuencia half-step (8 pasos)
 const uint8_t step_sequence[8][4] = {
@@ -116,3 +117,4 @@ void setStep(uint8_t step, int motor_id) {
 		break;
 	}
 }
+*/
