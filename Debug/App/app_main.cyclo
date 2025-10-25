@@ -1,4 +1,3 @@
-../App/app_main.c:18:6:app_main	1
-../App/app_main.c:32:6:stepMotor	1
-../App/app_main.c:43:6:stepForward	2
-../App/app_main.c:50:6:stepBackward	2
+../App/app_main.c:31:6:app_main	1
+../App/app_main.c:51:6:moverMotor	7
+../App/app_main.c:88:6:setStep	3
