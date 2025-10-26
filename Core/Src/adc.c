@@ -25,7 +25,6 @@
 /* USER CODE END 0 */
 
 ADC_HandleTypeDef hadc1;
-DMA_HandleTypeDef hdma_adc1;
 
 /* ADC1 init function */
 void MX_ADC1_Init(void)
@@ -132,34 +131,15 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     PC3     ------> ADC1_IN13
     PB1     ------> ADC1_IN9
     */
-    GPIO_InitStruct.Pin = LDR_2_Pin|LDR_3_Pin|LDR_4_Pin|LDR_5_Pin;
+    GPIO_InitStruct.Pin = NORTE_Pin|SUR_Pin|ESTE_Pin|OESTE_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = LDR_1_Pin;
+    GPIO_InitStruct.Pin = CENTRO_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(LDR_1_GPIO_Port, &GPIO_InitStruct);
-
-    /* ADC1 DMA Init */
-    /* ADC1 Init */
-    hdma_adc1.Instance = DMA2_Stream0;
-    hdma_adc1.Init.Channel = DMA_CHANNEL_0;
-    hdma_adc1.Init.Direction = DMA_PERIPH_TO_MEMORY;
-    hdma_adc1.Init.PeriphInc = DMA_PINC_DISABLE;
-    hdma_adc1.Init.MemInc = DMA_MINC_ENABLE;
-    hdma_adc1.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-    hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
-    hdma_adc1.Init.Mode = DMA_CIRCULAR;
-    hdma_adc1.Init.Priority = DMA_PRIORITY_LOW;
-    hdma_adc1.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-    if (HAL_DMA_Init(&hdma_adc1) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    __HAL_LINKDMA(adcHandle,DMA_Handle,hdma_adc1);
+    HAL_GPIO_Init(CENTRO_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN ADC1_MspInit 1 */
 
@@ -185,12 +165,10 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
     PC3     ------> ADC1_IN13
     PB1     ------> ADC1_IN9
     */
-    HAL_GPIO_DeInit(GPIOC, LDR_2_Pin|LDR_3_Pin|LDR_4_Pin|LDR_5_Pin);
+    HAL_GPIO_DeInit(GPIOC, NORTE_Pin|SUR_Pin|ESTE_Pin|OESTE_Pin);
 
-    HAL_GPIO_DeInit(LDR_1_GPIO_Port, LDR_1_Pin);
+    HAL_GPIO_DeInit(CENTRO_GPIO_Port, CENTRO_Pin);
 
-    /* ADC1 DMA DeInit */
-    HAL_DMA_DeInit(adcHandle->DMA_Handle);
   /* USER CODE BEGIN ADC1_MspDeInit 1 */
 
   /* USER CODE END ADC1_MspDeInit 1 */
