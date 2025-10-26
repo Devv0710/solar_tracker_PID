@@ -81,6 +81,13 @@ const osThreadAttr_t motorElTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
+/* Definitions for sensorTask */
+osThreadId_t sensorTaskHandle;
+const osThreadAttr_t sensorTask_attributes = {
+  .name = "sensorTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for motorAzQueue */
 osMessageQueueId_t motorAzQueueHandle;
 const osMessageQueueAttr_t motorAzQueue_attributes = {
@@ -101,6 +108,7 @@ void StartDefaultTask(void *argument);
 void ControlTask(void *argument);
 void MotorAzTask(void *argument);
 void MotorElTask(void *argument);
+void SensorTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -149,6 +157,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of motorElTask */
   motorElTaskHandle = osThreadNew(MotorElTask, NULL, &motorElTask_attributes);
+
+  /* creation of sensorTask */
+  sensorTaskHandle = osThreadNew(SensorTask, NULL, &sensorTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
 	/* add threads, ... */
@@ -302,6 +313,24 @@ void MotorElTask(void *argument)
 		}
 	}
   /* USER CODE END MotorElTask */
+}
+
+/* USER CODE BEGIN Header_SensorTask */
+/**
+* @brief Function implementing the sensorTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_SensorTask */
+void SensorTask(void *argument)
+{
+  /* USER CODE BEGIN SensorTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END SensorTask */
 }
 
 /* Private application code --------------------------------------------------*/
