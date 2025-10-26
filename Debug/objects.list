@@ -1,4 +1,3 @@
-"./App/app_main.o"
 "./Core/Src/adc.o"
 "./Core/Src/freertos.o"
 "./Core/Src/gpio.o"
