@@ -86,7 +86,7 @@ osThreadId_t sensorTaskHandle;
 const osThreadAttr_t sensorTask_attributes = {
   .name = "sensorTask",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityBelowNormal,
 };
 /* Definitions for motorAzQueue */
 osMessageQueueId_t motorAzQueueHandle;
@@ -328,7 +328,11 @@ void SensorTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	// Formatear los 5 valores en un string
+	sprintf(uart_buf, "LDRs: %lu, %lu, %lu, %lu, %lu\r\n", adc_values[0], adc_values[1], adc_values[2], adc_values[3], adc_values[4]);
+	// Enviar el string por UART
+	HAL_UART_Transmit(&huart2, (uint8_t*)uart_buf, strlen(uart_buf), 1000);
+	osDelay(100);
   }
   /* USER CODE END SensorTask */
 }
