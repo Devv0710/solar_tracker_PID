@@ -59,14 +59,14 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
-#define LDR_2_Pin GPIO_PIN_0
-#define LDR_2_GPIO_Port GPIOC
-#define LDR_3_Pin GPIO_PIN_1
-#define LDR_3_GPIO_Port GPIOC
-#define LDR_4_Pin GPIO_PIN_2
-#define LDR_4_GPIO_Port GPIOC
-#define LDR_5_Pin GPIO_PIN_3
-#define LDR_5_GPIO_Port GPIOC
+#define LDR_REF_Pin GPIO_PIN_0
+#define LDR_REF_GPIO_Port GPIOC
+#define LDR_OESTE_Pin GPIO_PIN_1
+#define LDR_OESTE_GPIO_Port GPIOC
+#define LDR_ESTE_Pin GPIO_PIN_2
+#define LDR_ESTE_GPIO_Port GPIOC
+#define LDR_SUR_Pin GPIO_PIN_3
+#define LDR_SUR_GPIO_Port GPIOC
 #define M_AZ_1_Pin GPIO_PIN_0
 #define M_AZ_1_GPIO_Port GPIOA
 #define M_AZ_2_Pin GPIO_PIN_1
@@ -85,8 +85,8 @@ void Error_Handler(void);
 #define M_EL_3_GPIO_Port GPIOA
 #define M_AZ_4_Pin GPIO_PIN_0
 #define M_AZ_4_GPIO_Port GPIOB
-#define LDR_1_Pin GPIO_PIN_1
-#define LDR_1_GPIO_Port GPIOB
+#define LDR_NORTE_Pin GPIO_PIN_1
+#define LDR_NORTE_GPIO_Port GPIOB
 #define M_EL_1_Pin GPIO_PIN_7
 #define M_EL_1_GPIO_Port GPIOC
 #define TMS_Pin GPIO_PIN_13
