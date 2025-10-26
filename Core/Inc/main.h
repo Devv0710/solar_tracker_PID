@@ -53,7 +53,8 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+extern volatile uint32_t adc_values[5];
+extern char uart_buf[100];
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

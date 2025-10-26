@@ -25,11 +25,17 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "usart.h"
+#include <stdio.h>
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+typedef struct {
+	uint32_t ldr[5];
+} SensorData_t;
+
 enum Motor_Id {
 	MOTOR_ELEVATION, MOTOR_AZIMUTH
 };
@@ -98,6 +104,11 @@ osMessageQueueId_t motorElQueueHandle;
 const osMessageQueueAttr_t motorElQueue_attributes = {
   .name = "motorElQueue"
 };
+/* Definitions for sensorQueue */
+osMessageQueueId_t sensorQueueHandle;
+const osMessageQueueAttr_t sensorQueue_attributes = {
+  .name = "sensorQueue"
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -140,6 +151,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of motorElQueue */
   motorElQueueHandle = osMessageQueueNew (5, sizeof(int32_t), &motorElQueue_attributes);
+
+  /* creation of sensorQueue */
+  sensorQueueHandle = osMessageQueueNew (1, sizeof(SensorData_t), &sensorQueue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
 	/* add queues, ... */
@@ -199,11 +213,30 @@ void StartDefaultTask(void *argument)
 void ControlTask(void *argument)
 {
   /* USER CODE BEGIN ControlTask */
+	SensorData_t received_data; // Una "caja" vacía para recibir los datos
+	osStatus_t status;
+
 	int32_t pasos_az_prueba = 20000;
 	int32_t pasos_el_prueba = 10000;
 	/* Infinite loop */
 	for (;;) {
 		// 1. Leer los 5 LDRs (usando el ADC)
+		// La tarea se duerme aquí, esperando a recibir un mensaje de la cola
+		status = osMessageQueueGet(sensorQueueHandle, &received_data, NULL, osWaitForever);
+
+		// Si el mensaje se recibió correctamente...
+		if(status == osOK)
+		{
+			// ...imprimimos los datos que acabamos de recibir.
+			sprintf(uart_buf, "ControlTask LDRs: %lu, %lu, %lu, %lu, %lu\r\n",
+			                  received_data.ldr[0],
+			                  received_data.ldr[1],
+			                  received_data.ldr[2],
+			                  received_data.ldr[3],
+			                  received_data.ldr[4]);
+			HAL_UART_Transmit(&huart2, (uint8_t*)uart_buf,
+			strlen(uart_buf), 1000);
+		}
 //		int32_t pasos_az_prueba = 20000;
 //		int32_t pasos_el_prueba = 10000;
 //		// 2. Calcular Error_Az y Error_El
@@ -325,13 +358,18 @@ void MotorElTask(void *argument)
 void SensorTask(void *argument)
 {
   /* USER CODE BEGIN SensorTask */
+	SensorData_t sensor_data;// Creamos una "caja" para nuestros datos
   /* Infinite loop */
   for(;;)
   {
-	// Formatear los 5 valores en un string
-	sprintf(uart_buf, "LDRs: %lu, %lu, %lu, %lu, %lu\r\n", adc_values[0], adc_values[1], adc_values[2], adc_values[3], adc_values[4]);
-	// Enviar el string por UART
-	HAL_UART_Transmit(&huart2, (uint8_t*)uart_buf, strlen(uart_buf), 1000);
+	// Copiamos los 5 valores leídos por el DMA a nuestra "caja"
+	for(int i = 0; i<5; i++)
+	{
+		sensor_data.ldr[i] = adc_values[i];
+	}
+	// Ponemos la "caja" (el paquete de datos) en la cola de mensajes
+	osMessageQueuePut(sensorQueueHandle, &sensor_data, 0U, 0U);
+
 	osDelay(100);
   }
   /* USER CODE END SensorTask */
