@@ -40,7 +40,9 @@ extern "C" {
 
 void MX_DMA_Init(void);
 
-/* USER CODE BEGIN Prototypes */
+extern DMA_HandleTypeDef hdma_adc1;
+
+/* USER CODE BEGIN EFP */
 
 /* USER CODE END Prototypes */
 

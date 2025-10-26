@@ -33,6 +33,8 @@
 
 /* USER CODE END 1 */
 
+DMA_HandleTypeDef hdma_adc1;
+
 /**
   * Enable DMA controller clock
   */
@@ -41,6 +43,22 @@ void MX_DMA_Init(void)
 
   /* DMA controller clock enable */
   __HAL_RCC_DMA2_CLK_ENABLE();
+
+  /* Configure DMA request hdma_adc1 on DMA2_Stream0 */
+  hdma_adc1.Instance = DMA2_Stream0;
+  hdma_adc1.Init.Channel = DMA_CHANNEL_0;
+  hdma_adc1.Init.Direction = DMA_PERIPH_TO_MEMORY;
+  hdma_adc1.Init.PeriphInc = DMA_PINC_DISABLE;
+  hdma_adc1.Init.MemInc = DMA_MINC_ENABLE;
+  hdma_adc1.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+  hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+  hdma_adc1.Init.Mode = DMA_CIRCULAR;
+  hdma_adc1.Init.Priority = DMA_PRIORITY_HIGH;
+  hdma_adc1.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+  if (HAL_DMA_Init(&hdma_adc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
 
   /* DMA interrupt init */
   /* DMA2_Stream0_IRQn interrupt configuration */
@@ -52,4 +70,3 @@ void MX_DMA_Init(void)
 /* USER CODE BEGIN 2 */
 
 /* USER CODE END 2 */
-
