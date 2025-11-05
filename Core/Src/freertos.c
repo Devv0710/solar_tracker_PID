@@ -40,6 +40,8 @@ enum Motor_Id {
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define TIEMPO_MUESTREO 50
+#define LIMITE_AZIMUTH 18000
+#define LIMITE_INFERIOR 0 // Asumimos que 0 es el otro límite
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -59,47 +61,30 @@ extern volatile uint32_t g_adc_valores[5];
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
-const osThreadAttr_t defaultTask_attributes = {
-  .name = "defaultTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
-};
+const osThreadAttr_t defaultTask_attributes = { .name = "defaultTask",
+		.stack_size = 128 * 4, .priority = (osPriority_t) osPriorityLow, };
 /* Definitions for controlTask */
 osThreadId_t controlTaskHandle;
-const osThreadAttr_t controlTask_attributes = {
-  .name = "controlTask",
-  .stack_size = 256 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
-};
+const osThreadAttr_t controlTask_attributes = { .name = "controlTask",
+		.stack_size = 256 * 4, .priority = (osPriority_t) osPriorityHigh, };
 /* Definitions for motorAzTask */
 osThreadId_t motorAzTaskHandle;
-const osThreadAttr_t motorAzTask_attributes = {
-  .name = "motorAzTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
-};
+const osThreadAttr_t motorAzTask_attributes = { .name = "motorAzTask",
+		.stack_size = 128 * 4, .priority = (osPriority_t) osPriorityNormal, };
 /* Definitions for motorElTask */
 osThreadId_t motorElTaskHandle;
-const osThreadAttr_t motorElTask_attributes = {
-  .name = "motorElTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
-};
+const osThreadAttr_t motorElTask_attributes = { .name = "motorElTask",
+		.stack_size = 128 * 4, .priority = (osPriority_t) osPriorityNormal, };
 /* Definitions for motorAzQueue */
 osMessageQueueId_t motorAzQueueHandle;
-const osMessageQueueAttr_t motorAzQueue_attributes = {
-  .name = "motorAzQueue"
-};
+const osMessageQueueAttr_t motorAzQueue_attributes = { .name = "motorAzQueue" };
 /* Definitions for motorElQueue */
 osMessageQueueId_t motorElQueueHandle;
-const osMessageQueueAttr_t motorElQueue_attributes = {
-  .name = "motorElQueue"
-};
+const osMessageQueueAttr_t motorElQueue_attributes = { .name = "motorElQueue" };
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 void setStep(uint8_t step, enum Motor_Id motor_id);
-uint32_t leer_adc(uint32_t channel);
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
@@ -110,58 +95,61 @@ void MotorElTask(void *argument);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /**
-  * @brief  FreeRTOS initialization
-  * @param  None
-  * @retval None
-  */
+ * @brief  FreeRTOS initialization
+ * @param  None
+ * @retval None
+ */
 void MX_FREERTOS_Init(void) {
-  /* USER CODE BEGIN Init */
+	/* USER CODE BEGIN Init */
 
-  /* USER CODE END Init */
+	/* USER CODE END Init */
 
-  /* USER CODE BEGIN RTOS_MUTEX */
+	/* USER CODE BEGIN RTOS_MUTEX */
 	/* add mutexes, ... */
-  /* USER CODE END RTOS_MUTEX */
+	/* USER CODE END RTOS_MUTEX */
 
-  /* USER CODE BEGIN RTOS_SEMAPHORES */
+	/* USER CODE BEGIN RTOS_SEMAPHORES */
 	/* add semaphores, ... */
-  /* USER CODE END RTOS_SEMAPHORES */
+	/* USER CODE END RTOS_SEMAPHORES */
 
-  /* USER CODE BEGIN RTOS_TIMERS */
+	/* USER CODE BEGIN RTOS_TIMERS */
 	/* start timers, add new ones, ... */
-  /* USER CODE END RTOS_TIMERS */
+	/* USER CODE END RTOS_TIMERS */
 
-  /* Create the queue(s) */
-  /* creation of motorAzQueue */
-  motorAzQueueHandle = osMessageQueueNew (5, sizeof(int32_t), &motorAzQueue_attributes);
+	/* Create the queue(s) */
+	/* creation of motorAzQueue */
+	motorAzQueueHandle = osMessageQueueNew(5, sizeof(int32_t),
+			&motorAzQueue_attributes);
 
-  /* creation of motorElQueue */
-  motorElQueueHandle = osMessageQueueNew (5, sizeof(int32_t), &motorElQueue_attributes);
+	/* creation of motorElQueue */
+	motorElQueueHandle = osMessageQueueNew(5, sizeof(int32_t),
+			&motorElQueue_attributes);
 
-  /* USER CODE BEGIN RTOS_QUEUES */
+	/* USER CODE BEGIN RTOS_QUEUES */
 	/* add queues, ... */
-  /* USER CODE END RTOS_QUEUES */
+	/* USER CODE END RTOS_QUEUES */
 
-  /* Create the thread(s) */
-  /* creation of defaultTask */
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+	/* Create the thread(s) */
+	/* creation of defaultTask */
+	defaultTaskHandle = osThreadNew(StartDefaultTask, NULL,
+			&defaultTask_attributes);
 
-  /* creation of controlTask */
-  controlTaskHandle = osThreadNew(ControlTask, NULL, &controlTask_attributes);
+	/* creation of controlTask */
+	controlTaskHandle = osThreadNew(ControlTask, NULL, &controlTask_attributes);
 
-  /* creation of motorAzTask */
-  motorAzTaskHandle = osThreadNew(MotorAzTask, NULL, &motorAzTask_attributes);
+	/* creation of motorAzTask */
+	motorAzTaskHandle = osThreadNew(MotorAzTask, NULL, &motorAzTask_attributes);
 
-  /* creation of motorElTask */
-  motorElTaskHandle = osThreadNew(MotorElTask, NULL, &motorElTask_attributes);
+	/* creation of motorElTask */
+	motorElTaskHandle = osThreadNew(MotorElTask, NULL, &motorElTask_attributes);
 
-  /* USER CODE BEGIN RTOS_THREADS */
+	/* USER CODE BEGIN RTOS_THREADS */
 	/* add threads, ... */
-  /* USER CODE END RTOS_THREADS */
+	/* USER CODE END RTOS_THREADS */
 
-  /* USER CODE BEGIN RTOS_EVENTS */
+	/* USER CODE BEGIN RTOS_EVENTS */
 	/* add events, ... */
-  /* USER CODE END RTOS_EVENTS */
+	/* USER CODE END RTOS_EVENTS */
 
 }
 
@@ -172,15 +160,14 @@ void MX_FREERTOS_Init(void) {
  * @retval None
  */
 /* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument)
-{
-  /* USER CODE BEGIN StartDefaultTask */
+void StartDefaultTask(void *argument) {
+	/* USER CODE BEGIN StartDefaultTask */
 	/* Infinite loop */
 	for (;;) {
 		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 		osDelay(1000);
 	}
-  /* USER CODE END StartDefaultTask */
+	/* USER CODE END StartDefaultTask */
 }
 
 /* USER CODE BEGIN Header_ControlTask */
@@ -190,58 +177,44 @@ void StartDefaultTask(void *argument)
  * @retval None
  */
 /* USER CODE END Header_ControlTask */
-void ControlTask(void *argument)
-{
-  /* USER CODE BEGIN ControlTask */
-	int32_t pasos_az_prueba = 20000;
-	int32_t pasos_el_prueba = 10000;
-
+void ControlTask(void *argument) {
+	/* USER CODE BEGIN ControlTask */
 	// --- PID para Azimuth ---
 	float Kp_az = 0.1;
-	float Ki_az = 0.01;
-	float Kd_az = 0.05;
+	float Ki_az = 0.0;
+	float Kd_az = 0.0;
 	float integral_sum_az = 0.0;
 	float last_error_az = 0.0;
 
 	// --- PID para Elevación ---
 	float Kp_el = 0.1;
-	float Ki_el = 0.01;
-	float Kd_el = 0.05;
+	float Ki_el = 0.0;
+	float Kd_el = 0.0;
 	float integral_sum_el = 0.0;
 	float last_error_el = 0.0;
 
 	const float dt = 0.05; // Tiempo de muestreo = 50ms = 0.05s
-	const int32_t NOCHE_THRESHOLD = 500; // Valor ADC (0-4095) que consideras "noche"
 
 	static char tx_buffer[256];
 
 	/* Infinite loop */
 	for (;;) {
-//		uint32_t ldr_norte = leer_adc(ADC_CHANNEL_9);
-//		uint32_t ldr_sur = leer_adc(ADC_CHANNEL_10);
-//		uint32_t ldr_este = leer_adc(ADC_CHANNEL_11);
-//		uint32_t ldr_oeste = leer_adc(ADC_CHANNEL_12);
-//		uint32_t ldr_ref = leer_adc(ADC_CHANNEL_13);
-
 		uint32_t ldr_norte = g_adc_valores[0]; // Asumiendo Rank 1 = CH9
-		uint32_t ldr_ref = g_adc_valores[1]; // Asumiendo Rank 2 = CH10
+//		uint32_t ldr_ref = g_adc_valores[1];
 		uint32_t ldr_oeste = g_adc_valores[2]; // Asumiendo Rank 3 = CH11
 		uint32_t ldr_este = g_adc_valores[3]; // Asumiendo Rank 4 = CH12
 		uint32_t ldr_sur = g_adc_valores[4]; // Asumiendo Rank 5 = CH13
-		// 2. LÓGICA DE DORMIR
-//		if (ldr_ref < NOCHE_THRESHOLD) {
-//			// Es de noche. No hagas nada con el PID.
-//			// (Opcional: enviar motores a posición "dormir")
-//			osDelay(1000); // Dormir 1 segundo y volver a chequear
-//			continue;      // Saltar el resto del bucle
-//		}
+
 		// 2. Calcular Error_Az y Error_El
 		int32_t error_az = ldr_este - ldr_oeste;
 		int32_t error_el = ldr_norte - ldr_sur;
 
 		//PID AZIMUTH
 		float p_term_az = Kp_az * (float) error_az;
-		integral_sum_az += (float) error_az * dt;
+		if (osMessageQueueGetSpace(motorAzQueueHandle) > 0) {
+			integral_sum_az += (float) error_az * dt;
+		}
+
 		float i_term_az = Ki_az * integral_sum_az;
 		float error_deriv_az = ((float) error_az - last_error_az) / dt;
 		float d_term_az = Kd_az * error_deriv_az;
@@ -249,7 +222,9 @@ void ControlTask(void *argument)
 
 		//PID ELEVACIÓN
 		float p_term_el = Kp_el * (float) error_el;
-		integral_sum_el += (float) error_el * dt;
+		if (osMessageQueueGetSpace(motorElQueueHandle) > 0) {
+			integral_sum_el += (float) error_el * dt;
+		}
 		float i_term_el = Ki_el * integral_sum_el;
 		float error_deriv_el = ((float) error_el - last_error_el) / dt;
 		float d_term_el = Kd_el * error_deriv_el;
@@ -257,10 +232,12 @@ void ControlTask(void *argument)
 
 		//SALIDA DEL PID AZIMUTH
 		int32_t pasos_az = (int32_t) (p_term_az + i_term_az + d_term_az);
-		//SALIDA DEL PID ELEVACION
-		int32_t pasos_el = (int32_t) (p_term_el + i_term_el + d_term_el);
 
-		// 5. Enviar la orden a las otras tareas (usando una "Queue" de FreeRTOS)
+		//SALIDA DEL PID ELEVACION
+		int32_t pasos_el_calculados = (int32_t) (p_term_el + i_term_el
+				+ d_term_el);
+		int32_t pasos_el = -pasos_el_calculados;
+
 		if (pasos_az != 0) {
 			osMessageQueuePut(motorAzQueueHandle, &pasos_az, 0U, 0U);
 		}
@@ -269,39 +246,19 @@ void ControlTask(void *argument)
 		}
 
 		if (HAL_UART_GetState(&huart2) == HAL_UART_STATE_READY) {
-			// (B) Formatear el string de forma segura
-			// Usamos snprintf para evitar desbordamiento del búfer
 			snprintf(tx_buffer, 256,
 					"E:%ld O:%ld N:%ld S:%ld | ErrAz:%ld ErrEl:%ld | P_Az:%ld P_El:%ld\r\n",
 					ldr_este, ldr_oeste, ldr_norte, ldr_sur, error_az, error_el,
 					pasos_az, pasos_el);
 
-			// (C) Iniciar la transmisión DMA
-			// Esta función retorna INMEDIATAMENTE (no bloquea)
-			// El hardware de DMA se encarga del resto.
 			HAL_UART_Transmit_DMA(&huart2, (uint8_t*) tx_buffer,
 					strlen(tx_buffer));
 		}
 
 		// 6. Dormir esta tarea por 50ms (para el bucle de control)
 		osDelay(50);
-
-//		osMessageQueuePut(motorAzQueueHandle, &pasos_az_prueba, 0U, 0U);
-//		osMessageQueuePut(motorElQueueHandle, &pasos_el_prueba, 0U, 0U);
-//
-//		osDelay(5000);
-//
-//		// 3. Enviar órdenes de regreso
-//		int32_t pasos_az_regreso = -20000;
-//		int32_t pasos_el_regreso = -10000;
-//		osMessageQueuePut(motorAzQueueHandle, &pasos_az_regreso, 0U, 0U);
-//		osMessageQueuePut(motorElQueueHandle, &pasos_el_regreso, 0U, 0U);
-//
-//		// 4. Dormir 5 segundos
-//		osDelay(5000);
-
 	}
-  /* USER CODE END ControlTask */
+	/* USER CODE END ControlTask */
 }
 
 /* USER CODE BEGIN Header_MotorAzTask */
@@ -311,17 +268,36 @@ void ControlTask(void *argument)
  * @retval None
  */
 /* USER CODE END Header_MotorAzTask */
-void MotorAzTask(void *argument)
-{
-  /* USER CODE BEGIN MotorAzTask */
+void MotorAzTask(void *argument) {
+	/* USER CODE BEGIN MotorAzTask */
 	int32_t pasos_a_mover = 0;
 	uint8_t paso_actual_az = 0;
+
+	int32_t posicion_actual_az = 0;
 	/* Infinite loop */
 	for (;;) {
 		// 1. Esperar (bloqueado) hasta recibir una orden en la cola de AZIMUTH
 		if (osMessageQueueGet(motorAzQueueHandle, &pasos_a_mover, NULL,
 		osWaitForever) == osOK) {
 
+			if (pasos_a_mover > 0) {
+				if (posicion_actual_az + pasos_a_mover > LIMITE_AZIMUTH) {
+					// El comando nos pide ir más allá del límite.
+					// Recalculamos los pasos para ir SOLO hasta el límite.
+					pasos_a_mover = LIMITE_AZIMUTH - posicion_actual_az;
+				}
+			}
+			// 3. Comprobar si el movimiento es en dirección negativa
+			else if (pasos_a_mover < 0) {
+				if (posicion_actual_az + pasos_a_mover < LIMITE_INFERIOR) {
+					// El comando nos pide ir más allá del límite 0.
+					// Recalculamos los pasos para ir SOLO hasta 0.
+					pasos_a_mover = LIMITE_INFERIOR - posicion_actual_az; // (Esto dará un número negativo o 0)
+				}
+			}
+			if (pasos_a_mover == 0) {
+				continue;
+			}
 			// 2. Ejecutar la orden
 			int32_t pasos_abs =
 					(pasos_a_mover > 0) ? pasos_a_mover : -pasos_a_mover;
@@ -331,17 +307,20 @@ void MotorAzTask(void *argument)
 					paso_actual_az++;
 					if (paso_actual_az > 7)
 						paso_actual_az = 0;
+					posicion_actual_az++;
+
 				} else {
 					paso_actual_az--;
 					if (paso_actual_az < 0)
 						paso_actual_az = 7;
+					posicion_actual_az--;
 				}
 				setStep(paso_actual_az, MOTOR_AZIMUTH);
 				osDelay(4);
 			}
 		}
 	}
-  /* USER CODE END MotorAzTask */
+	/* USER CODE END MotorAzTask */
 }
 
 /* USER CODE BEGIN Header_MotorElTask */
@@ -351,15 +330,16 @@ void MotorAzTask(void *argument)
  * @retval None
  */
 /* USER CODE END Header_MotorElTask */
-void MotorElTask(void *argument)
-{
-  /* USER CODE BEGIN MotorElTask */
+void MotorElTask(void *argument) {
+	/* USER CODE BEGIN MotorElTask */
 	int32_t pasos_a_mover = 0;
 	uint8_t paso_actual_el = 0;
+
 	/* Infinite loop */
 	for (;;) {
 		if (osMessageQueueGet(motorElQueueHandle, &pasos_a_mover, NULL,
 		osWaitForever) == osOK) {
+
 			int32_t pasos_abs =
 					(pasos_a_mover > 0) ? pasos_a_mover : -pasos_a_mover;
 
@@ -368,17 +348,22 @@ void MotorElTask(void *argument)
 					paso_actual_el++;
 					if (paso_actual_el > 7)
 						paso_actual_el = 0;
+
 				} else {
 					paso_actual_el--;
 					if (paso_actual_el < 0)
 						paso_actual_el = 7;
+
 				}
 				setStep(paso_actual_el, MOTOR_ELEVATION);
 				osDelay(4);
+
 			}
+
 		}
+
 	}
-  /* USER CODE END MotorElTask */
+	/* USER CODE END MotorElTask */
 }
 
 /* Private application code --------------------------------------------------*/
@@ -412,15 +397,6 @@ void setStep(uint8_t step, enum Motor_Id motor_id) {
 	default:
 		break;
 	}
-}
-
-uint32_t leer_adc(uint32_t channel) {
-//	ADC_ChannelConfTypeDef sConfig = { 0 };
-	uint32_t adc_valor = 0;
-
-	/*
-	 */
-	return adc_valor;
 }
 
 /* USER CODE END Application */
