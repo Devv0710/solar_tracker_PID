@@ -1,6 +1,6 @@
-../Core/Src/freertos.c:102:6:MX_FREERTOS_Init	1
-../Core/Src/freertos.c:163:6:StartDefaultTask	1
-../Core/Src/freertos.c:180:6:ControlTask	6
-../Core/Src/freertos.c:271:6:MotorAzTask	10
-../Core/Src/freertos.c:333:6:MotorElTask	5
-../Core/Src/freertos.c:372:6:setStep	3
+../Core/Src/freertos.c:104:6:MX_FREERTOS_Init	1
+../Core/Src/freertos.c:165:6:StartDefaultTask	1
+../Core/Src/freertos.c:182:6:ControlTask	8
+../Core/Src/freertos.c:284:6:MotorAzTask	10
+../Core/Src/freertos.c:346:6:MotorElTask	6
+../Core/Src/freertos.c:388:6:setStep	3

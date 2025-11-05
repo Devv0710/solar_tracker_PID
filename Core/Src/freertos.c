@@ -42,6 +42,7 @@ enum Motor_Id {
 #define TIEMPO_MUESTREO 50
 #define LIMITE_AZIMUTH 18000
 #define LIMITE_INFERIOR 0 // Asumimos que 0 es el otro límite
+#define ALPHA 0.1f
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -58,6 +59,7 @@ const uint8_t step_sequence[8][4] = { { 1, 0, 0, 0 }, { 1, 1, 0, 0 }, { 0, 1, 0,
 extern ADC_HandleTypeDef hadc1;
 extern UART_HandleTypeDef huart2;
 extern volatile uint32_t g_adc_valores[5];
+volatile float g_adc_valores_filtrados[5];
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -197,13 +199,24 @@ void ControlTask(void *argument) {
 
 	static char tx_buffer[256];
 
+	// Inicializar los valores filtrados con la primera lectura de ADC
+	for (int i = 0; i < 5; i++) {
+		g_adc_valores_filtrados[i] = g_adc_valores[i];
+	}
+
 	/* Infinite loop */
 	for (;;) {
-		uint32_t ldr_norte = g_adc_valores[0]; // Asumiendo Rank 1 = CH9
+
+		// Aplicar el filtro EMA a los valores del ADC
+		for (int i = 0; i < 5; i++) {
+			g_adc_valores_filtrados[i] = (ALPHA * g_adc_valores[i]) + ((1.0f - ALPHA) * g_adc_valores_filtrados[i]);
+		}
+
+		uint32_t ldr_norte = g_adc_valores_filtrados[0]; // Asumiendo Rank 1 = CH9
 //		uint32_t ldr_ref = g_adc_valores[1];
-		uint32_t ldr_oeste = g_adc_valores[2]; // Asumiendo Rank 3 = CH11
-		uint32_t ldr_este = g_adc_valores[3]; // Asumiendo Rank 4 = CH12
-		uint32_t ldr_sur = g_adc_valores[4]; // Asumiendo Rank 5 = CH13
+		uint32_t ldr_oeste = g_adc_valores_filtrados[2]; // Asumiendo Rank 3 = CH11
+		uint32_t ldr_este = g_adc_valores_filtrados[3]; // Asumiendo Rank 4 = CH12
+		uint32_t ldr_sur = g_adc_valores_filtrados[4]; // Asumiendo Rank 5 = CH13
 
 		// 2. Calcular Error_Az y Error_El
 		int32_t error_az = ldr_este - ldr_oeste;
@@ -340,6 +353,9 @@ void MotorElTask(void *argument) {
 		if (osMessageQueueGet(motorElQueueHandle, &pasos_a_mover, NULL,
 		osWaitForever) == osOK) {
 
+			if(pasos_a_mover == 0){
+				continue;
+			}
 			int32_t pasos_abs =
 					(pasos_a_mover > 0) ? pasos_a_mover : -pasos_a_mover;
 
