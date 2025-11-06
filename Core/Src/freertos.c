@@ -63,26 +63,42 @@ volatile float g_adc_valores_filtrados[5];
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
-const osThreadAttr_t defaultTask_attributes = { .name = "defaultTask",
-		.stack_size = 128 * 4, .priority = (osPriority_t) osPriorityLow, };
+const osThreadAttr_t defaultTask_attributes = {
+  .name = "defaultTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for controlTask */
 osThreadId_t controlTaskHandle;
-const osThreadAttr_t controlTask_attributes = { .name = "controlTask",
-		.stack_size = 256 * 4, .priority = (osPriority_t) osPriorityHigh, };
+const osThreadAttr_t controlTask_attributes = {
+  .name = "controlTask",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityHigh,
+};
 /* Definitions for motorAzTask */
 osThreadId_t motorAzTaskHandle;
-const osThreadAttr_t motorAzTask_attributes = { .name = "motorAzTask",
-		.stack_size = 128 * 4, .priority = (osPriority_t) osPriorityNormal, };
+const osThreadAttr_t motorAzTask_attributes = {
+  .name = "motorAzTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
 /* Definitions for motorElTask */
 osThreadId_t motorElTaskHandle;
-const osThreadAttr_t motorElTask_attributes = { .name = "motorElTask",
-		.stack_size = 128 * 4, .priority = (osPriority_t) osPriorityNormal, };
+const osThreadAttr_t motorElTask_attributes = {
+  .name = "motorElTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
 /* Definitions for motorAzQueue */
 osMessageQueueId_t motorAzQueueHandle;
-const osMessageQueueAttr_t motorAzQueue_attributes = { .name = "motorAzQueue" };
+const osMessageQueueAttr_t motorAzQueue_attributes = {
+  .name = "motorAzQueue"
+};
 /* Definitions for motorElQueue */
 osMessageQueueId_t motorElQueueHandle;
-const osMessageQueueAttr_t motorElQueue_attributes = { .name = "motorElQueue" };
+const osMessageQueueAttr_t motorElQueue_attributes = {
+  .name = "motorElQueue"
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -97,61 +113,58 @@ void MotorElTask(void *argument);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /**
- * @brief  FreeRTOS initialization
- * @param  None
- * @retval None
- */
+  * @brief  FreeRTOS initialization
+  * @param  None
+  * @retval None
+  */
 void MX_FREERTOS_Init(void) {
-	/* USER CODE BEGIN Init */
+  /* USER CODE BEGIN Init */
 
-	/* USER CODE END Init */
+  /* USER CODE END Init */
 
-	/* USER CODE BEGIN RTOS_MUTEX */
+  /* USER CODE BEGIN RTOS_MUTEX */
 	/* add mutexes, ... */
-	/* USER CODE END RTOS_MUTEX */
+  /* USER CODE END RTOS_MUTEX */
 
-	/* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
 	/* add semaphores, ... */
-	/* USER CODE END RTOS_SEMAPHORES */
+  /* USER CODE END RTOS_SEMAPHORES */
 
-	/* USER CODE BEGIN RTOS_TIMERS */
+  /* USER CODE BEGIN RTOS_TIMERS */
 	/* start timers, add new ones, ... */
-	/* USER CODE END RTOS_TIMERS */
+  /* USER CODE END RTOS_TIMERS */
 
-	/* Create the queue(s) */
-	/* creation of motorAzQueue */
-	motorAzQueueHandle = osMessageQueueNew(5, sizeof(int32_t),
-			&motorAzQueue_attributes);
+  /* Create the queue(s) */
+  /* creation of motorAzQueue */
+  motorAzQueueHandle = osMessageQueueNew (5, sizeof(int32_t), &motorAzQueue_attributes);
 
-	/* creation of motorElQueue */
-	motorElQueueHandle = osMessageQueueNew(5, sizeof(int32_t),
-			&motorElQueue_attributes);
+  /* creation of motorElQueue */
+  motorElQueueHandle = osMessageQueueNew (5, sizeof(int32_t), &motorElQueue_attributes);
 
-	/* USER CODE BEGIN RTOS_QUEUES */
+  /* USER CODE BEGIN RTOS_QUEUES */
 	/* add queues, ... */
-	/* USER CODE END RTOS_QUEUES */
+  /* USER CODE END RTOS_QUEUES */
 
-	/* Create the thread(s) */
-	/* creation of defaultTask */
-	defaultTaskHandle = osThreadNew(StartDefaultTask, NULL,
-			&defaultTask_attributes);
+  /* Create the thread(s) */
+  /* creation of defaultTask */
+  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
-	/* creation of controlTask */
-	controlTaskHandle = osThreadNew(ControlTask, NULL, &controlTask_attributes);
+  /* creation of controlTask */
+  controlTaskHandle = osThreadNew(ControlTask, NULL, &controlTask_attributes);
 
-	/* creation of motorAzTask */
-	motorAzTaskHandle = osThreadNew(MotorAzTask, NULL, &motorAzTask_attributes);
+  /* creation of motorAzTask */
+  motorAzTaskHandle = osThreadNew(MotorAzTask, NULL, &motorAzTask_attributes);
 
-	/* creation of motorElTask */
-	motorElTaskHandle = osThreadNew(MotorElTask, NULL, &motorElTask_attributes);
+  /* creation of motorElTask */
+  motorElTaskHandle = osThreadNew(MotorElTask, NULL, &motorElTask_attributes);
 
-	/* USER CODE BEGIN RTOS_THREADS */
+  /* USER CODE BEGIN RTOS_THREADS */
 	/* add threads, ... */
-	/* USER CODE END RTOS_THREADS */
+  /* USER CODE END RTOS_THREADS */
 
-	/* USER CODE BEGIN RTOS_EVENTS */
+  /* USER CODE BEGIN RTOS_EVENTS */
 	/* add events, ... */
-	/* USER CODE END RTOS_EVENTS */
+  /* USER CODE END RTOS_EVENTS */
 
 }
 
@@ -162,14 +175,15 @@ void MX_FREERTOS_Init(void) {
  * @retval None
  */
 /* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument) {
-	/* USER CODE BEGIN StartDefaultTask */
+void StartDefaultTask(void *argument)
+{
+  /* USER CODE BEGIN StartDefaultTask */
 	/* Infinite loop */
 	for (;;) {
 		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 		osDelay(1000);
 	}
-	/* USER CODE END StartDefaultTask */
+  /* USER CODE END StartDefaultTask */
 }
 
 /* USER CODE BEGIN Header_ControlTask */
@@ -179,8 +193,9 @@ void StartDefaultTask(void *argument) {
  * @retval None
  */
 /* USER CODE END Header_ControlTask */
-void ControlTask(void *argument) {
-	/* USER CODE BEGIN ControlTask */
+void ControlTask(void *argument)
+{
+  /* USER CODE BEGIN ControlTask */
 	// --- PID para Azimuth ---
 	float Kp_az = 0.1;
 	float Ki_az = 0.0;
@@ -191,7 +206,7 @@ void ControlTask(void *argument) {
 	// --- PID para Elevación ---
 	float Kp_el = 0.1;
 	float Ki_el = 0.0;
-	float Kd_el = 0.0;
+	float Kd_el = 0.2;
 	float integral_sum_el = 0.0;
 	float last_error_el = 0.0;
 
@@ -206,7 +221,7 @@ void ControlTask(void *argument) {
 
 	/* Infinite loop */
 	for (;;) {
-
+		HAL_GPIO_WritePin(TASK_C_GPIO_Port, TASK_C_Pin, GPIO_PIN_SET);
 		// Aplicar el filtro EMA a los valores del ADC
 		for (int i = 0; i < 5; i++) {
 			g_adc_valores_filtrados[i] = (ALPHA * g_adc_valores[i]) + ((1.0f - ALPHA) * g_adc_valores_filtrados[i]);
@@ -260,18 +275,17 @@ void ControlTask(void *argument) {
 
 		if (HAL_UART_GetState(&huart2) == HAL_UART_STATE_READY) {
 			snprintf(tx_buffer, 256,
-					"E:%ld O:%ld N:%ld S:%ld | ErrAz:%ld ErrEl:%ld | P_Az:%ld P_El:%ld\r\n",
-					ldr_este, ldr_oeste, ldr_norte, ldr_sur, error_az, error_el,
-					pasos_az, pasos_el);
+					"N:%ld S:%ld |  ErrEl:%ld |  P_El:%ld\r\n",
+					 ldr_norte, ldr_sur, error_el,
+					 pasos_el);
 
 			HAL_UART_Transmit_DMA(&huart2, (uint8_t*) tx_buffer,
 					strlen(tx_buffer));
 		}
-
-		// 6. Dormir esta tarea por 50ms (para el bucle de control)
+		HAL_GPIO_WritePin(TASK_C_GPIO_Port, TASK_C_Pin, GPIO_PIN_RESET);
 		osDelay(50);
 	}
-	/* USER CODE END ControlTask */
+  /* USER CODE END ControlTask */
 }
 
 /* USER CODE BEGIN Header_MotorAzTask */
@@ -281,18 +295,18 @@ void ControlTask(void *argument) {
  * @retval None
  */
 /* USER CODE END Header_MotorAzTask */
-void MotorAzTask(void *argument) {
-	/* USER CODE BEGIN MotorAzTask */
+void MotorAzTask(void *argument)
+{
+  /* USER CODE BEGIN MotorAzTask */
 	int32_t pasos_a_mover = 0;
 	uint8_t paso_actual_az = 0;
 
 	int32_t posicion_actual_az = 0;
 	/* Infinite loop */
 	for (;;) {
-		// 1. Esperar (bloqueado) hasta recibir una orden en la cola de AZIMUTH
 		if (osMessageQueueGet(motorAzQueueHandle, &pasos_a_mover, NULL,
 		osWaitForever) == osOK) {
-
+			HAL_GPIO_WritePin(TASK_M1_GPIO_Port, TASK_M1_Pin, GPIO_PIN_SET);
 			if (pasos_a_mover > 0) {
 				if (posicion_actual_az + pasos_a_mover > LIMITE_AZIMUTH) {
 					// El comando nos pide ir más allá del límite.
@@ -329,11 +343,12 @@ void MotorAzTask(void *argument) {
 					posicion_actual_az--;
 				}
 				setStep(paso_actual_az, MOTOR_AZIMUTH);
+				HAL_GPIO_WritePin(TASK_M1_GPIO_Port, TASK_M1_Pin, GPIO_PIN_RESET);
 				osDelay(4);
 			}
 		}
 	}
-	/* USER CODE END MotorAzTask */
+  /* USER CODE END MotorAzTask */
 }
 
 /* USER CODE BEGIN Header_MotorElTask */
@@ -343,8 +358,9 @@ void MotorAzTask(void *argument) {
  * @retval None
  */
 /* USER CODE END Header_MotorElTask */
-void MotorElTask(void *argument) {
-	/* USER CODE BEGIN MotorElTask */
+void MotorElTask(void *argument)
+{
+  /* USER CODE BEGIN MotorElTask */
 	int32_t pasos_a_mover = 0;
 	uint8_t paso_actual_el = 0;
 
@@ -352,7 +368,7 @@ void MotorElTask(void *argument) {
 	for (;;) {
 		if (osMessageQueueGet(motorElQueueHandle, &pasos_a_mover, NULL,
 		osWaitForever) == osOK) {
-
+			HAL_GPIO_WritePin(TASK_M2_GPIO_Port, TASK_M2_Pin, GPIO_PIN_SET);
 			if(pasos_a_mover == 0){
 				continue;
 			}
@@ -372,6 +388,7 @@ void MotorElTask(void *argument) {
 
 				}
 				setStep(paso_actual_el, MOTOR_ELEVATION);
+				HAL_GPIO_WritePin(TASK_M2_GPIO_Port, TASK_M2_Pin, GPIO_PIN_RESET);
 				osDelay(4);
 
 			}
@@ -379,7 +396,7 @@ void MotorElTask(void *argument) {
 		}
 
 	}
-	/* USER CODE END MotorElTask */
+  /* USER CODE END MotorElTask */
 }
 
 /* Private application code --------------------------------------------------*/
